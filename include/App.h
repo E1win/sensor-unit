@@ -1,9 +1,12 @@
 #pragma once
 
 #include "./config.h"
+
+#include "./Interface/Display.h"
 #include "./Interface/Potentiometer.h"
-#include "./Sensors/DHT11Sensor.h"
 #include "./Interface/Alarm.h"
+
+#include "./Sensors/DHT11Sensor.h"
 
 class App
 {
@@ -19,6 +22,7 @@ private:
     Potentiometer m_ptnmtr;
     DHT11Sensor m_dht11;
     Alarm m_alarm;
+    Display m_display;
 
     float m_temperature;
     float m_humidity;

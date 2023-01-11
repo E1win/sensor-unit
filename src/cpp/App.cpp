@@ -16,6 +16,8 @@ void App::Run()
 
     Serial.println("Starting program...");
 
+    m_display.Init();
+
     m_dht11.Start();
 
     while (true)
@@ -69,6 +71,9 @@ void App::Run()
 
         // Optimisation: create new protothread when alarm is supposed to turn on
         // and just delete it when alarm is supposed to turn off
+
+        m_display.Reset();
+        m_display.Update(m_temperature, m_idealTemperature, m_humidity, m_idealHumidity);
 
         delay(1000);
     }
