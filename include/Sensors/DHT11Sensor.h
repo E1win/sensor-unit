@@ -9,6 +9,8 @@ class DHT11Sensor
 public:
     DHT11Sensor(byte pin, uint8_t type);
 
+    void Start();
+
     float GetTemperature() const;
     float GetHumidity() const;
 

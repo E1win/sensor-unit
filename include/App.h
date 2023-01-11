@@ -3,6 +3,7 @@
 #include "./config.h"
 #include "./Interface/Potentiometer.h"
 #include "./Sensors/DHT11Sensor.h"
+#include "./Interface/Alarm.h"
 
 class App
 {
@@ -12,12 +13,16 @@ public:
     void Run();
 
 private:
+    bool WithinRange(float value1, float value2, float maxDifference);
+
+private:
     Potentiometer m_ptnmtr;
     DHT11Sensor m_dht11;
+    Alarm m_alarm;
 
-    int m_temperature;
-    int m_humidity;
+    float m_temperature;
+    float m_humidity;
 
-    int m_idealTemperature;
-    int m_idealHumidity;
+    float m_idealTemperature = 24.f;
+    float m_idealHumidity = 50.f;
 };

@@ -8,14 +8,15 @@ class Potentiometer
 public:
     Potentiometer(byte pin);
 
-    int GetValue() const;
-    bool IsChanged();
+    int GetValue();
+
+private:
+    int ConvertToRange(int num, int min, int max);
 
 private:
     byte m_pin;
 
-    const static int minChange = 20;
+    int m_value;
 
     int m_valuePercentage;
-    bool m_hasNewValue = false;
 };

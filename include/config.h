@@ -4,10 +4,12 @@
 
 #define UNIT_ID 0
 
-#define DHT_PIN 32
+#define DHT_PIN 33
 #define DHT_TYPE DHT11
 
-#define POTENTIOMETER_PIN 33
+#define POTENTIOMETER_PIN 39
+
+#define ALARM_PIN 32
 
 #define BUTTON1_PIN 35
 #define BUTTON2_PIN 0
