@@ -2,7 +2,14 @@
 // GLOBAL CONFIGURATION
 /**************************/
 
+// REPLACE WITH SENSOR UNIT ID
 #define UNIT_ID 0
+
+// REPLACE WITH HUB UNIT MAC ADDRESS
+#define RECEIVER_MAC_ADDRESS               \
+    {                                      \
+        0x24, 0x6F, 0x28, 0x25, 0x30, 0x58 \
+    }
 
 #define DHT_PIN 33
 #define DHT_TYPE DHT11

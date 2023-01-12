@@ -16,16 +16,23 @@ void App::Run()
 
     Serial.println("Starting program...");
 
+    m_dataSender.Init();
+
     m_display.Init();
 
     m_dht11.Start();
 
     while (true)
     {
+        // Store previous values
+        float prevTemperature = m_temperature;
+        float prevHumidity = m_humidity;
+        float prevIdealTemperature = m_idealTemperature;
+        float prevIdealHumidity = m_idealHumidity;
+
         m_temperature = m_dht11.GetTemperature();
         m_humidity = m_dht11.GetHumidity();
 
-        // Get ideal humidity from potentiometer
         m_idealHumidity = m_ptnmtr.GetValue();
 
         // TODO: use buttons to change ideal temperature
@@ -56,8 +63,9 @@ void App::Run()
         // Check if state of alarm has changed.
         if (previousState != m_alarm.IsOn())
         {
-            // Send new state to hub
+            m_dataSender.SendStatus(UNIT_ID, m_alarm.IsOn());
 
+            // PRINTING FOR DEBUG
             Serial.println("State of alarm has changed.");
             if (m_alarm.IsOn())
             {
@@ -69,11 +77,18 @@ void App::Run()
             }
         }
 
-        // Optimisation: create new protothread when alarm is supposed to turn on
-        // and just delete it when alarm is supposed to turn off
-
-        m_display.Reset();
-        m_display.Update(m_temperature, m_idealTemperature, m_humidity, m_idealHumidity);
+        // Check if current values are
+        // different from previous values
+        // update Display if they are
+        if (
+            prevTemperature != m_temperature ||
+            prevIdealTemperature != m_idealTemperature ||
+            prevHumidity != m_humidity ||
+            prevIdealHumidity != m_idealHumidity)
+        {
+            m_display.Reset();
+            m_display.Update(m_temperature, m_idealTemperature, m_humidity, m_idealHumidity);
+        }
 
         delay(1000);
     }

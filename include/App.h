@@ -8,6 +8,8 @@
 
 #include "./Sensors/DHT11Sensor.h"
 
+#include "./Net/DataSender.h"
+
 class App
 {
 public:
@@ -23,6 +25,7 @@ private:
     DHT11Sensor m_dht11;
     Alarm m_alarm;
     Display m_display;
+    DataSender m_dataSender;
 
     float m_temperature;
     float m_humidity;
