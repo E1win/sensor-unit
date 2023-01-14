@@ -30,27 +30,31 @@ void Display::Reset()
 
 void Display::Update(float temperature, float idealTemperature, float humidity, float idealHumidity)
 {
-    float xPosTemp = 10;
-    float xPosHumidity = DISPLAY_HEIGHT / 2 + 10;
-    float yPos = 10;
+    // ROW 1
 
-    m_sprite.drawString("Temp:", xPosTemp, yPos);
-    m_sprite.drawString("Hmdty:", xPosHumidity, yPos);
+    m_sprite.drawString("Huidig", colTwo, rowOne);
+    m_sprite.drawString("Gewenst", colThree, rowOne);
 
-    yPos += 30;
+    // DIVIDING LINE ROW 1 - ROW 2
+    m_sprite.drawLine(0, rowTwo - yPadding, DISPLAY_HEIGHT, rowTwo - yPadding, TFT_WHITE);
 
-    m_sprite.drawString(String(temperature) + "C", xPosTemp, yPos);
-    m_sprite.drawString(String(humidity) + "%", xPosHumidity, yPos);
+    // DIVIDING LINE ROW 2 - ROW 3
+    m_sprite.drawLine(0, rowThree - yPadding, DISPLAY_HEIGHT, rowThree - yPadding, TFT_WHITE);
 
-    yPos += 30;
+    // DIVIDING LINE COL 1 - COL 2
+    m_sprite.drawLine(colTwo - xPadding, 0, colTwo - xPadding, DISPLAY_WIDTH, TFT_WHITE);
 
-    m_sprite.drawString("Ideal:", xPosTemp, yPos);
-    m_sprite.drawString("Ideal:", xPosHumidity, yPos);
+    // ROW 2
 
-    yPos += 30;
+    m_sprite.drawString("C", colOne, rowTwo);
+    m_sprite.drawString(String(temperature) + "C", colTwo, rowTwo);
+    m_sprite.drawString(String(idealTemperature) + "C", colThree, rowTwo);
 
-    m_sprite.drawString(String(idealTemperature) + "C", xPosTemp, yPos);
-    m_sprite.drawString(String(idealHumidity) + "%", xPosHumidity, yPos);
+    // ROW 3
+
+    m_sprite.drawString("RV", colOne, rowThree);
+    m_sprite.drawString(String(humidity) + "%", colTwo, rowThree);
+    m_sprite.drawString(String(idealHumidity) + "%", colThree, rowThree);
 
     m_sprite.pushSprite(0, 0);
 }
