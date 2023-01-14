@@ -3,7 +3,8 @@
 /**************************/
 
 // REPLACE WITH SENSOR UNIT ID
-#define UNIT_ID 0
+// ID RANGE: 0 - 7
+#define UNIT_ID 4
 
 // REPLACE WITH HUB UNIT MAC ADDRESS
 #define RECEIVER_MAC_ADDRESS               \

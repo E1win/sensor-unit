@@ -5,6 +5,7 @@
 #include "./Interface/Display.h"
 #include "./Interface/Potentiometer.h"
 #include "./Interface/Alarm.h"
+#include "./Interface/MyButton.h"
 
 #include "./Sensors/DHT11Sensor.h"
 
@@ -26,6 +27,8 @@ private:
     Alarm m_alarm;
     Display m_display;
     DataSender m_dataSender;
+    MyButton m_btn1;
+    MyButton m_btn2;
 
     float m_temperature;
     float m_humidity;

@@ -2,7 +2,9 @@
 
 App::App() : m_ptnmtr(POTENTIOMETER_PIN),
              m_dht11(DHT_PIN, DHT_TYPE),
-             m_alarm(ALARM_PIN)
+             m_alarm(ALARM_PIN),
+             m_btn1(BUTTON1_PIN),
+             m_btn2(BUTTON2_PIN)
 {
 }
 
@@ -35,12 +37,15 @@ void App::Run()
 
         m_idealHumidity = m_ptnmtr.GetValue();
 
-        // TODO: use buttons to change ideal temperature
-
-        // PRINTING FOR DEBUG
-        Serial.println(m_temperature);
-        Serial.println(m_humidity);
-        Serial.println(m_idealHumidity);
+        // TODO: MAKE THIS MORE BUG PROOF
+        if (m_btn1.IsPressed())
+        {
+            m_idealTemperature++;
+        }
+        else if (m_btn2.IsPressed())
+        {
+            m_idealTemperature--;
+        }
 
         // Save previous state of alarm
         bool previousState = m_alarm.IsOn();
