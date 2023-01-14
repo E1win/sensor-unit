@@ -32,6 +32,7 @@ void Display::Update(float temperature, float idealTemperature, float humidity, 
 {
     // ROW 1
 
+    m_sprite.drawString(String(UNIT_ID), colOne, rowOne);
     m_sprite.drawString("Huidig", colTwo, rowOne);
     m_sprite.drawString("Gewenst", colThree, rowOne);
 
