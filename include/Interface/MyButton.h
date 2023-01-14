@@ -12,6 +12,8 @@ public:
 private:
     byte m_pin;
 
-    bool m_prevState;
-    bool m_state;
+    bool m_pressed;
+
+private:
+    static void Loop(void *params);
 };

@@ -40,10 +40,12 @@ void App::Run()
         // TODO: MAKE THIS MORE BUG PROOF
         if (m_btn1.IsPressed())
         {
+            Serial.println("Button 1 Pressed");
             m_idealTemperature++;
         }
         else if (m_btn2.IsPressed())
         {
+            Serial.println("Button 2 Pressed");
             m_idealTemperature--;
         }
 
@@ -91,11 +93,10 @@ void App::Run()
             prevHumidity != m_humidity ||
             prevIdealHumidity != m_idealHumidity)
         {
-            m_display.Reset();
             m_display.Update(m_temperature, m_idealTemperature, m_humidity, m_idealHumidity);
         }
 
-        delay(1000);
+        delay(200);
     }
 }
 
