@@ -13,6 +13,13 @@ public:
     void Init();
 
     void SendStatus(int id, bool status);
+    void SendData(
+        int id,
+        bool status,
+        float temperature,
+        float idealTemperature,
+        float humidity,
+        float idealHumidity);
 
     static bool dataReceived;
 
@@ -26,6 +33,10 @@ private:
     {
         int id;
         bool status;
+        float temperature;
+        float idealTemperature;
+        float humidity;
+        float idealHumidity;
     } data_message;
 
     data_message myData;

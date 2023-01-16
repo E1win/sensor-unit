@@ -53,12 +53,8 @@ void App::Run()
         bool previousState = m_alarm.IsOn();
 
         // Check if humidity deviates more than 10% from ideal humidity
-        // or is temperature deviates more than 10% from ideal temperature
-
-        // Need something different for temperature,
-        // WithinRange will not work
-        // since it is not in percentage
-        if (!WithinRange(m_humidity, m_idealHumidity, 10))
+        // or is temperature deviates more than 2C from ideal temperature
+        if (!WithinRange(m_humidity, m_idealHumidity, m_maxHumidityDeviation) || !WithinRange(m_temperature, m_idealTemperature, m_maxTemperatureDeviation))
         {
             m_alarm.TurnOn();
         }
@@ -70,7 +66,14 @@ void App::Run()
         // Check if state of alarm has changed.
         if (previousState != m_alarm.IsOn())
         {
-            m_dataSender.SendStatus(UNIT_ID, m_alarm.IsOn());
+            // Send status to Hub
+            m_dataSender.SendData(
+                UNIT_ID,
+                m_alarm.IsOn(),
+                m_temperature,
+                m_idealTemperature,
+                m_humidity,
+                m_idealHumidity);
 
             // PRINTING FOR DEBUG
             Serial.println("State of alarm has changed.");
@@ -93,6 +96,14 @@ void App::Run()
             prevHumidity != m_humidity ||
             prevIdealHumidity != m_idealHumidity)
         {
+            m_dataSender.SendData(
+                UNIT_ID,
+                m_alarm.IsOn(),
+                m_temperature,
+                m_idealTemperature,
+                m_humidity,
+                m_idealHumidity);
+
             m_display.Update(m_temperature, m_idealTemperature, m_humidity, m_idealHumidity);
         }
 
@@ -100,9 +111,9 @@ void App::Run()
     }
 }
 
-bool App::WithinRange(float humidity, float idealHumidity, float maxDifference)
+bool App::WithinRange(float currValue, float idealValue, float maxDifference)
 {
-    float difference = abs(humidity - idealHumidity);
+    float difference = abs(currValue - idealValue);
 
     if (difference >= maxDifference)
     {

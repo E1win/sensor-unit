@@ -19,7 +19,7 @@ public:
     void Run();
 
 private:
-    bool WithinRange(float value1, float value2, float maxDifference);
+    bool WithinRange(float currValue, float idealValue, float maxDifference);
 
 private:
     Potentiometer m_ptnmtr;
@@ -35,4 +35,7 @@ private:
 
     float m_idealTemperature = 24.f;
     float m_idealHumidity = 50.f;
+
+    float m_maxTemperatureDeviation = 2.f;
+    float m_maxHumidityDeviation = 10.f;
 };
