@@ -32,6 +32,7 @@ void DHT11Sensor::Loop(void *params)
 
     for (;;)
     {
+        Serial.println("Reading values from sensor...");
 
         sensors_event_t event;
 

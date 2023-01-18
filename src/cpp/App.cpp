@@ -37,7 +37,7 @@ void App::Run()
 
         m_idealHumidity = m_ptnmtr.GetValue();
 
-        // TODO: MAKE THIS MORE BUG PROOF
+        // TODO: CONSTRAIN THIS TO CERTAIN RANGE
         if (m_btn1.IsPressed())
         {
             Serial.println("Button 1 Pressed");
@@ -66,15 +66,6 @@ void App::Run()
         // Check if state of alarm has changed.
         if (previousState != m_alarm.IsOn())
         {
-            // Send status to Hub
-            m_dataSender.SendData(
-                UNIT_ID,
-                m_alarm.IsOn(),
-                m_temperature,
-                m_idealTemperature,
-                m_humidity,
-                m_idealHumidity);
-
             // PRINTING FOR DEBUG
             Serial.println("State of alarm has changed.");
             if (m_alarm.IsOn())
