@@ -32,18 +32,18 @@ void App::Run()
         float prevIdealTemperature = m_idealTemperature;
         float prevIdealHumidity = m_idealHumidity;
 
+        // Get data from sensor
         m_temperature = m_dht11.GetTemperature();
         m_humidity = m_dht11.GetHumidity();
 
         m_idealHumidity = m_ptnmtr.GetValue();
 
-        // TODO: CONSTRAIN THIS TO CERTAIN RANGE
-        if (m_btn1.IsPressed())
+        if (m_btn1.IsPressed() && m_idealTemperature < m_maxIdealTemp)
         {
             Serial.println("Button 1 Pressed");
             m_idealTemperature++;
         }
-        else if (m_btn2.IsPressed())
+        else if (m_btn2.IsPressed() && m_idealTemperature > m_minIdealTemp)
         {
             Serial.println("Button 2 Pressed");
             m_idealTemperature--;
@@ -52,8 +52,9 @@ void App::Run()
         // Save previous state of alarm
         bool previousState = m_alarm.IsOn();
 
-        // Check if humidity deviates more than 10% from ideal humidity
-        // or is temperature deviates more than 2C from ideal temperature
+        // Turn alarm on if
+        // humidity deviates more than 10% from ideal humidity
+        // or temperature deviates more than 2C from ideal temperature
         if (!WithinRange(m_humidity, m_idealHumidity, m_maxHumidityDeviation) || !WithinRange(m_temperature, m_idealTemperature, m_maxTemperatureDeviation))
         {
             m_alarm.TurnOn();
@@ -80,13 +81,13 @@ void App::Run()
 
         // Check if current values are
         // different from previous values
-        // update Display if they are
         if (
             prevTemperature != m_temperature ||
             prevIdealTemperature != m_idealTemperature ||
             prevHumidity != m_humidity ||
             prevIdealHumidity != m_idealHumidity)
         {
+            // Send data to Hub
             m_dataSender.SendData(
                 UNIT_ID,
                 m_alarm.IsOn(),
@@ -95,6 +96,7 @@ void App::Run()
                 m_humidity,
                 m_idealHumidity);
 
+            // Update display with new values
             m_display.Update(m_temperature, m_idealTemperature, m_humidity, m_idealHumidity);
         }
 

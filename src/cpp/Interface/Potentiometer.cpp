@@ -17,7 +17,8 @@ Potentiometer::Potentiometer(byte pin)
     Serial.print("Initial reading: ");
     Serial.println(value);
 
-    m_prevPercentage = ConvertToRange(m_median, 20, 90);
+    m_valuePercentage = ConvertToRange(m_median, 20, 90);
+    m_prevPercentage = m_valuePercentage;
     m_prevPrevPercentage = m_prevPercentage;
 }
 
@@ -25,61 +26,51 @@ int Potentiometer::GetValue()
 {
     int newValue = analogRead(m_pin);
 
+    // Inserts reading in pastReadings array
+    // And finds median of last few readings to
+    // ignore sudden drops of voltage
+    // caused by calls to sensor.
     InsertReading(newValue);
 
-    if (abs(m_pastReadings[1] - newValue) < 5)
+    if (abs(m_pastReadings[1] - newValue) < 25)
     {
-        int temp = m_prevPercentage;
-        m_prevPercentage = m_valuePercentage;
-        m_prevPrevPercentage = temp;
         return m_valuePercentage;
     }
 
     Serial.print("Reading: ");
     Serial.println(newValue);
 
-    // Insert new reading in past reading array.
-    InsertReading(newValue);
-
     Serial.print("Median: ");
     Serial.println(m_median);
-
-    // apply exponential smoothing on median value
-    m_value += (newValue - m_value) / 4;
-
-    Serial.print("Smoothed Median: ");
-    Serial.println(m_value);
 
     // Convert gotten value to humidity percentage.
     // Valid range of humidity on DHT11 is 20% to 90%
 
-    m_valuePercentage = ConvertToRange(m_median, 20, 90);
+    int newPercentage = ConvertToRange(m_median, 20, 90);
 
-    Serial.print("Curr Percentage: ");
-    Serial.println(m_valuePercentage);
+    Serial.print("Percentage: ");
+    Serial.println(newPercentage);
 
-    if (abs(m_valuePercentage - m_prevPercentage) == 1 && abs(m_valuePercentage - m_prevPrevPercentage) == 1)
-    {
-        // return previous percentage
-
-        int temp = m_prevPercentage;
-        m_prevPercentage = m_valuePercentage;
-        m_prevPrevPercentage = temp;
-        Serial.println("Returned prev percentage");
-
-        return temp;
-    }
-
-    Serial.println("Returned current percentage");
     Serial.println("--------");
 
-    int temp = m_prevPercentage;
-    m_prevPercentage = m_valuePercentage;
-    m_prevPrevPercentage = temp;
+    // Following statements are to avoid percentage fluctuating between two values
+    if (newPercentage != m_valuePercentage)
+    {
+        if (newPercentage == m_prevPercentage)
+        {
+            return m_valuePercentage;
+        }
+
+        m_prevPercentage = m_valuePercentage;
+        m_valuePercentage = newPercentage;
+        return m_valuePercentage;
+    }
 
     return m_valuePercentage;
 }
 
+// Insert reading into past readings array
+// Also finds median of last readings
 void Potentiometer::InsertReading(int value)
 {
     int temp;
@@ -87,8 +78,6 @@ void Potentiometer::InsertReading(int value)
     int min = value;
     int max = value;
     m_median = value;
-
-    // 3, 5, 5
 
     for (int i = 0; i < trackedReadings; i++)
     {
@@ -112,11 +101,6 @@ void Potentiometer::InsertReading(int value)
 
         value = temp;
     }
-
-    // Serial.print("Min: ");
-    // Serial.print(min);
-    // Serial.print("Max: ");
-    // Serial.print(max);
 }
 
 int Potentiometer::GetAverageOfReadings()

@@ -38,4 +38,7 @@ private:
 
     float m_maxTemperatureDeviation = 2.f;
     float m_maxHumidityDeviation = 10.f;
+
+    float m_maxIdealTemp = 50.f;
+    float m_minIdealTemp = 10.f;
 };
