@@ -54,16 +54,10 @@ int Potentiometer::GetValue()
     Serial.println("--------");
 
     // Following statements are to avoid percentage fluctuating between two values
-    if (newPercentage != m_valuePercentage)
+    if (newPercentage != m_valuePercentage && abs(newPercentage - m_prevPercentage) > 2)
     {
-        if (newPercentage == m_prevPercentage)
-        {
-            return m_valuePercentage;
-        }
-
         m_prevPercentage = m_valuePercentage;
         m_valuePercentage = newPercentage;
-        return m_valuePercentage;
     }
 
     return m_valuePercentage;
